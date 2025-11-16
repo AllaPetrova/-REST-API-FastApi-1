@@ -1,20 +1,52 @@
-#### Запуск:
+# FastAPI REST API
 
-1. Создайте и активируйте виртуальное окружение:
+Простое REST API приложение на FastAPI для управления пользователями.
+
+## Функциональность
+
+- Создание пользователя
+- Получение списка пользователей
+- Получение пользователя по ID
+- Обновление пользователя
+- Удаление пользователя
+
+## Запуск приложения
+
+### Локальный запуск
+
+1. Установите зависимости:
+```bash
+pip install -r requirements.txt
+
+2. Запустите приложение:
+```bash
+uvicorn main:app --reload
+
+Запуск с Docker
+
+##  Соберите и запустите контейнеры:
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-```
+docker-compose up --build
 
-2. Используйте docker-compose для запуска контейнера:
-```bash
-docker-compose up -d
-```
+Приложение будет доступно по адресу: http://localhost:8000
 
-3. Выполнять запросы можно c помощью Swagger `http://localhost:8000/docs/`, `requests-examples.http` или `client.py`
+Документация API: http://localhost:8000/docs
 
-Вы можете использовать HTTP-запросы с помощью расширения для вашего редактора кода (например, VSCode) или через инструмент requests для тестирования серверных API.
+
+**Dockerfile**
+```dockerfile
+FROM python:3.9
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 
 # Домашнее задание к лекции «Создание REST API на FastApi» часть 1
