@@ -16,8 +16,8 @@
 
 Создание: `POST /advertisement`  
 Обновление: `PATCH /advertisement/{advertisement_id}`  
-Удаление: DELETE /advertisement/{advertisement_id}  
-Получение по id: GET  /advertisement/{advertisement_id}  
-Поиск по полям: GET /advertisement?{query_string}
+Удаление: `DELETE /advertisement/{advertisement_id}`  
+Получение по id: `GET  /advertisement/{advertisement_id}`  
+Поиск по полям: `GET /advertisement?{query_string}`
 
 Авторизацию и аутентификацию реализовывать не нужно
