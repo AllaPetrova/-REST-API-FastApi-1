@@ -19,7 +19,7 @@ class AdUpdate(BaseModel):
 
 class AdResponse(AdBase):
     id: int
-    created_at: datetime  
+    created_at: datetime
     
     class Config:
         orm_mode = True
