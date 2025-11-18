@@ -7,14 +7,12 @@ from typing import Optional, List
 from datetime import datetime
 import os
 
-# Database configuration
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# Database models
 class AdModel(Base):
     __tablename__ = "advertisements"
     
@@ -25,7 +23,6 @@ class AdModel(Base):
     author = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-# Pydantic schemas
 class AdBase(BaseModel):
     title: str
     description: Optional[str] = None
@@ -48,13 +45,10 @@ class AdResponse(AdBase):
     class Config:
         orm_mode = True
 
-# Create tables
 Base.metadata.create_all(bind=engine)
 
-# FastAPI app
 app = FastAPI(title="Advertisement Service", version="1.0.0")
 
-# Dependency to get database session
 def get_db():
     db = SessionLocal()
     try:
@@ -62,10 +56,8 @@ def get_db():
     finally:
         db.close()
 
-# API endpoints
 @app.post("/advertisement", response_model=AdResponse)
 async def create_advertisement(ad: AdCreate, db: Session = Depends(get_db)):
-    """Создание нового объявления"""
     db_ad = AdModel(**ad.dict())
     db.add(db_ad)
     db.commit()
@@ -74,7 +66,6 @@ async def create_advertisement(ad: AdCreate, db: Session = Depends(get_db)):
 
 @app.get("/advertisement/{advertisement_id}", response_model=AdResponse)
 async def get_advertisement(advertisement_id: int, db: Session = Depends(get_db)):
-    """Получение объявления по ID"""
     db_ad = db.query(AdModel).filter(AdModel.id == advertisement_id).first()
     if db_ad is None:
         raise HTTPException(status_code=404, detail="Advertisement not found")
@@ -89,7 +80,6 @@ async def search_advertisements(
     max_price: Optional[float] = None,
     db: Session = Depends(get_db)
 ):
-    """Поиск объявлений по различным полям"""
     query = db.query(AdModel)
     
     if title:
@@ -112,7 +102,6 @@ async def update_advertisement(
     ad_update: AdUpdate, 
     db: Session = Depends(get_db)
 ):
-    """Обновление объявления"""
     db_ad = db.query(AdModel).filter(AdModel.id == advertisement_id).first()
     if db_ad is None:
         raise HTTPException(status_code=404, detail="Advertisement not found")
@@ -127,7 +116,6 @@ async def update_advertisement(
 
 @app.delete("/advertisement/{advertisement_id}")
 async def delete_advertisement(advertisement_id: int, db: Session = Depends(get_db)):
-    """Удаление объявления"""
     db_ad = db.query(AdModel).filter(AdModel.id == advertisement_id).first()
     if db_ad is None:
         raise HTTPException(status_code=404, detail="Advertisement not found")
@@ -139,7 +127,3 @@ async def delete_advertisement(advertisement_id: int, db: Session = Depends(get_
 @app.get("/")
 async def root():
     return {"message": "Advertisement Service is running"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
