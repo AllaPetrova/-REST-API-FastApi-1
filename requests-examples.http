@@ -1,26 +1,22 @@
-### Получить всех пользователей
-GET http://localhost:8000/users
-
-### Получить пользователя по ID
-GET http://localhost:8000/users/1
-
-### Создать нового пользователя
-POST http://localhost:8000/users
+POST http://localhost:8000/advertisement
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "john@example.com"
+  "title": "Продам ноутбук",
+  "description": "Отличное состояние",
+  "price": 50000.0,
+  "author": "Иван Иванов"
 }
 
-### Обновить пользователя
-PUT http://localhost:8000/users/1
+GET http://localhost:8000/advertisement/1
+
+GET http://localhost:8000/advertisement?title=ноутбук&min_price=40000
+
+PATCH http://localhost:8000/advertisement/1
 Content-Type: application/json
 
 {
-  "name": "John Smith",
-  "email": "johnsmith@example.com"
+  "price": 45000.0
 }
 
-### Удалить пользователя
-DELETE http://localhost:8000/users/1
+DELETE http://localhost:8000/advertisement/1
