@@ -5,11 +5,11 @@ from datetime import datetime
 Base = declarative_base()
 
 class AdModel(Base):
-    __tablename__ = "advertisements"  
+    __tablename__ = "advertisements"
     
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(String)
     price = Column(Float, nullable=False)
     author = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)  
+    created_at = Column(DateTime, default=datetime.utcnow)
