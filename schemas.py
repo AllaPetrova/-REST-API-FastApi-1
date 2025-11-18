@@ -1,25 +1,25 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
-class AdvertisementBase(BaseModel):
-    title: str = Field(..., max_length=200)
+class AdBase(BaseModel):
+    title: str
     description: Optional[str] = None
-    price: float = Field(..., gt=0)
-    author: str = Field(..., max_length=100)
+    price: float
+    author: str
 
-class AdvertisementCreate(AdvertisementBase):
+class AdCreate(AdBase):
     pass
 
-class AdvertisementUpdate(BaseModel):
-    title: Optional[str] = Field(None, max_length=200)
+class AdUpdate(BaseModel):
+    title: Optional[str] = None
     description: Optional[str] = None
-    price: Optional[float] = Field(None, gt=0)
-    author: Optional[str] = Field(None, max_length=100)
+    price: Optional[float] = None
+    author: Optional[str] = None
 
-class Advertisement(AdvertisementBase):
-    id: str
-    created_at: datetime
+class AdResponse(AdBase):
+    id: int
+    created_at: datetime  
     
     class Config:
         orm_mode = True
